@@ -11,6 +11,7 @@ import (
 func MakeVerificationMailTask(c amqp.Consumer, s service.Service) func() {
 	for {
 		var r struct {
+			Name  string `json:"name"`
 			Hash  string `json:"hash"`
 			Email string `json:"email"`
 		}
@@ -19,6 +20,6 @@ func MakeVerificationMailTask(c amqp.Consumer, s service.Service) func() {
 
 		json.Unmarshal(b, &r)
 
-		s.SendVerificationMail(context.TODO(), r.Hash, r.Email)
+		s.SendVerificationMail(context.TODO(), r.Name, r.Email, r.Hash)
 	}
 }
