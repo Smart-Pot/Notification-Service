@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/smtp"
 	"os"
 	"path/filepath"
 )
@@ -13,13 +14,14 @@ type mailService struct {
 	Password string `json:"password"`
 	SmtpHost string `json:"smtpHost"`
 	SmtpPort string `json:"smtpPort"`
+	auth     smtp.Auth
 }
 
-func (m *mailService) sendMail(to, msg string) error {
-
-	fmt.Println("SEND MESSAGE TO", to, " That", msg)
-
-	return nil
+func (m *mailService) sendMail(to []string, msg string) error {
+	return smtp.SendMail(m.address(), m.auth, m.Email, to, []byte(msg))
+}
+func (m *mailService) address() string {
+	return fmt.Sprintf("%s:%s", m.SmtpHost, m.SmtpPort)
 }
 
 func newMailService() *mailService {
@@ -45,5 +47,8 @@ func newMailService() *mailService {
 	if err = json.Unmarshal(b, &s); err != nil {
 		panic(err)
 	}
+	fmt.Println("HELLO S", s)
+	s.auth = smtp.PlainAuth("", s.Email, s.Password, s.SmtpHost)
+
 	return &s
 }

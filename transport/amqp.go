@@ -3,6 +3,7 @@ package transport
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"notifservice/service"
 
 	"github.com/Smart-Pot/pkg/adapter/amqp"
@@ -20,6 +21,8 @@ func MakeVerificationMailTask(c amqp.Consumer, s service.Service) func() {
 
 		json.Unmarshal(b, &r)
 
-		s.SendVerificationMail(context.TODO(), r.Name, r.Email, r.Hash)
+		if err := s.SendVerificationMail(context.TODO(), r.Name, r.Email, r.Hash); err != nil {
+			log.Fatal("asd", err)
+		}
 	}
 }

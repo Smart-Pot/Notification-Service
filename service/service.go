@@ -29,5 +29,5 @@ func (s *service) SendVerificationMail(ctx context.Context, name, email, hash st
 	if err != nil {
 		return err
 	}
-	return s.mailer.sendMail(email, msg)
+	return s.mailer.sendMail([]string{email}, msg)
 }

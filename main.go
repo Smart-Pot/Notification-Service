@@ -5,6 +5,8 @@ import (
 	"notifservice/cmd"
 	"os"
 
+	_ "notifservice/service"
+
 	"github.com/Smart-Pot/pkg"
 	"github.com/Smart-Pot/pkg/adapter/amqp"
 )
