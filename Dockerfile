@@ -8,6 +8,7 @@ RUN go mod download
 RUN go build -o /notificationservice
 
 FROM alpine:3.13
+COPY --from=build /app/templates/ ./templates/
 COPY --from=build /app/config/ ./config/
 COPY --from=build /notificationservice /notificationservice
 
